@@ -17,12 +17,12 @@ const ElevatorManager = () => {
     ]);
 
     const handleFloorClick = (targetFloor: number) => {
-        const availableElevatorIndex = elevatorState.findIndex((curElevator) => !curElevator.isMoving);
-
-        if(elevatorState[availableElevatorIndex].currentFloor === targetFloor) return;
+        const nearestElevatorIndex = elevatorState.findIndex((curElevator) => !curElevator.isMoving);
+        
+        if(elevatorState[nearestElevatorIndex].currentFloor === targetFloor) return;
 
         setElevatorState((prev: ElevatorState[]) =>
-            prev.map((elevator, idx) => idx === availableElevatorIndex
+            prev.map((elevator, idx) => idx === nearestElevatorIndex
                     ? { ...elevator, targetFloor, isMoving: true }
                     : elevator
             )

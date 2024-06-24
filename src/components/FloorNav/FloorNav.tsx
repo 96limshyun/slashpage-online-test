@@ -24,16 +24,16 @@ const FloorNav = ({ handleFloorClick, elevatorState }: FloorNavProps) => {
     }, [elevatorState]);
 
     return (
-        <nav className={`flex items-center gap-2 `}>
+        <nav className={`flex items-center gap-2`}>
             <h2>호출</h2>
-            <div className={`flex border-2`}>
+            <div className={`flex border-2 border-gray-300`}>
                 {floors.map((floor, idx) => {
                     const disable = isDisable(floor);
                     return (
                         <button
                             key={idx}
                             className={`px-2 ${
-                                idx !== 14 ? "border-r-2" : ""
+                                idx !== 14 ? "border-r-2 border-gray-300" : ""
                             } ${
                                 !allDisable &&
                                 disable &&
