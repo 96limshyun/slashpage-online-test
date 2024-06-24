@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { ElevatorState } from "../ElevatorManager/ElevatorManager";
-const floors = Array.from({ length: 15 }, (_, i) => i + 1);
+import { FLOORS, LAST_FLOOR_NUM } from "../../constants/elevatorConstants";
 
 interface FloorNavProps {
     handleFloorClick: (target: number) => void;
@@ -27,13 +27,13 @@ const FloorNav = ({ handleFloorClick, elevatorState }: FloorNavProps) => {
         <nav className={`flex items-center gap-2`}>
             <h2>호출</h2>
             <div className={`flex border-2 border-gray-300`}>
-                {floors.map((floor, idx) => {
+                {FLOORS.map((floor, idx) => {
                     const disable = isDisable(floor);
                     return (
                         <button
                             key={idx}
                             className={`px-2 ${
-                                idx !== 14 ? "border-r-2 border-gray-300" : ""
+                                idx !== LAST_FLOOR_NUM ? "border-r-2 border-gray-300" : ""
                             } ${
                                 !allDisable &&
                                 disable &&

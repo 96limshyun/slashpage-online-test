@@ -1,9 +1,8 @@
 import { useState } from "react";
 import FloorNav from "../FloorNav/FloorNav";
 import ElevatorWrap from "../ElevatorWrap/ElevatorWrap";
-
+import { FIRST_ELEVATOR, HALF_FLOOR_NUM } from "../../constants/elevatorConstants";
 export interface ElevatorState {
-    id: number;
     currentFloor: number;
     targetFloor: number | null;
     isMoving: boolean;
@@ -11,14 +10,32 @@ export interface ElevatorState {
 
 const ElevatorManager = () => {
     const [elevatorState, setElevatorState] = useState<ElevatorState[]>([
-        { id: 1, currentFloor: 1, targetFloor: null, isMoving: false },
-        { id: 2, currentFloor: 1, targetFloor: null, isMoving: false },
-        { id: 3, currentFloor: 1, targetFloor: null, isMoving: false }
+        { currentFloor: 1, targetFloor: null, isMoving: false },
+        { currentFloor: 1, targetFloor: null, isMoving: false },
+        { currentFloor: 1, targetFloor: null, isMoving: false }
     ]);
 
-    const handleFloorClick = (targetFloor: number) => {
-        const nearestElevatorIndex = elevatorState.findIndex((curElevator) => !curElevator.isMoving);
+    const getNearestElevatorIndex = () => {
+    
+        const firstElevatorFloor = elevatorState[FIRST_ELEVATOR].currentFloor;
+        const isAllSameFloor = elevatorState.every((curElevator) => curElevator.currentFloor === firstElevatorFloor);
         
+        if (isAllSameFloor) {
+            return elevatorState.findIndex((curElevator) => !curElevator.isMoving);
+        }
+    
+        const nonMovingElevators = elevatorState.filter(elevator => !elevator.isMoving);
+        const distances = nonMovingElevators.map(elevator => Math.abs(elevator.currentFloor - HALF_FLOOR_NUM));
+        const minDistance = Math.min(...distances);
+        const nearestElevatorIndex = distances.indexOf(minDistance);
+    
+        return elevatorState.findIndex(elevator => elevator === nonMovingElevators[nearestElevatorIndex]);
+    }
+    
+
+    const handleFloorClick = (targetFloor: number) => {
+        const nearestElevatorIndex = getNearestElevatorIndex()
+
         if(elevatorState[nearestElevatorIndex].currentFloor === targetFloor) return;
 
         setElevatorState((prev: ElevatorState[]) =>
